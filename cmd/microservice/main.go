@@ -1,17 +1,20 @@
 package main
 
 import (
-	"fmt"
 	"micriservice/internal/config"
+	"micriservice/internal/logger"
 )
 
 func main() {
+
 	// Init config.
 	cfg := config.MustLoad()
 
-	fmt.Println(cfg)
+	// Init logger
+	log := logger.SetupLogger(cfg.Env)
 
-	// TODO: init logger
+	log.Info("Starting url-shortener.")
+	log.Debug("Debug messages are enabled. Env: " + cfg.Env)
 
 	// TODO: init storage
 

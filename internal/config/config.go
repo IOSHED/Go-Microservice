@@ -9,6 +9,12 @@ import (
 	"github.com/ilyakaznacheev/cleanenv"
 )
 
+const (
+	EnvLocal = "local"
+	EnvDev   = "dev"
+	EnvProd  = "prod"
+)
+
 // Config holds the application configuration.
 type Config struct {
 	Env        string `yaml:"env" env-default:"local" env-description:"the way the microservice is launched: on local, in dev, in prod"`
