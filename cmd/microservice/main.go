@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	// init config
+	// Init config.
 	cfg := config.MustLoad()
 
 	fmt.Println(cfg)
