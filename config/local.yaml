@@ -3,6 +3,6 @@ env: "local"    # "local" or "dev" or "prod"
 storag_path: "./storage/storage.db"
 httpserver:
   address: "localhost:8080"
-  timeout: 4s
-  idle_timeout: 60s   # After how long will the connection with the user be closed.
+  timeout: 4s         # The maximum waiting time to complete a single operation (for example, to complete an HTTP request).
+  idle_timeout: 60s   # How long will the server wait for activity (for example, a new request) from the client.
   

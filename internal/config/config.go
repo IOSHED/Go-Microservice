@@ -19,7 +19,7 @@ type Config struct {
 // HttpServer holds HTTP server configuration.
 type HttpServer struct {
 	Address     string        `yaml:"address" env-required:"./storage"`
-	Timeout     time.Duration `yaml:"timeout" env-default:"4s" env-description:"the maximum waiting time to complete a single operation (for example, to complete an HTTP request"`
+	Timeout     time.Duration `yaml:"timeout" env-default:"4s" env-description:"the maximum waiting time to complete a single operation (for example, to complete an HTTP request)"`
 	IdleTimeout time.Duration `yaml:"idle_timeout" env-default:"60s" env-description:"how long will the server wait for activity (for example, a new request) from the client"`
 }
 
