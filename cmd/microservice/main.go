@@ -25,13 +25,13 @@ func main() {
 		return
 	}
 
-	description, err := storage.GetTaskByName("todo2")
+	id, err := storage.DeleteTaskByName("todo2")
 	if err != nil {
-		log.Error("Failed to init storage.", slog.String("err", err.Error()))
+		log.Error("Failed to delete task", slog.String("err", err.Error()))
 		return
 	}
 
-	log.Info("Get task", slog.String("description", description))
+	log.Info("Delete task", slog.Int64("description", id))
 
 	// TODO: init router
 

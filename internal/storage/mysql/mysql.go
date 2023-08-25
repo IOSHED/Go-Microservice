@@ -3,7 +3,6 @@ package mysql
 import (
 	"database/sql"
 	"fmt"
-	"micriservice/internal/storage"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -38,14 +37,14 @@ func (s *Storage) SaveTask(name string, description string) (int64, error) {
 
 	id, err := res.LastInsertId()
 	if err != nil {
-		return -1, fmt.Errorf("%s : %s %w", op, storage.ErrGetInsertId, err)
+		return -1, fmt.Errorf("%s : %w", op, err)
 	}
 
 	return id, nil
 }
 
-func (s *Storage) GetTaskByName(name string) (string, error) {
-	const op = "storage.mysql.GetTaskByName"
+func (s *Storage) GetTaskDescriptionByName(name string) (string, error) {
+	const op = "storage.mysql.GetTaskDescriptionByName"
 
 	stmt, err := s.db.Prepare("SELECT description FROM task WHERE name = ?")
 	if err != nil {
@@ -60,4 +59,38 @@ func (s *Storage) GetTaskByName(name string) (string, error) {
 	}
 
 	return description, nil
+}
+
+func (s *Storage) GetTaskByName(name string) (int64, error) {
+	const op = "storage.mysql.GetTaskByName"
+
+	stmt, err := s.db.Prepare("SELECT id FROM task WHERE name = ?")
+	if err != nil {
+		return -1, fmt.Errorf("%s : %w", op, err)
+	}
+
+	var id int64
+
+	err = stmt.QueryRow(name).Scan(&id)
+	if err != nil {
+		return -1, fmt.Errorf("%s : %w", op, err)
+	}
+
+	return id, nil
+}
+
+func (s *Storage) DeleteTaskByName(name string) (int64, error) {
+	const op = "storage.mysql.DeleteTaskByName"
+
+	id, err := s.GetTaskByName(name)
+	if err != nil {
+		return -1, fmt.Errorf("%s : %w", op, err)
+	}
+
+	_, err = s.db.Exec("DELETE FROM task WHERE name = ?", name)
+	if err != nil {
+		return -1, fmt.Errorf("%s : %w", op, err)
+	}
+
+	return id, nil
 }
