@@ -22,6 +22,7 @@ func New(storagePath string) (*Storage, error) {
 	return &Storage{db}, nil
 }
 
+// Saving the task. The name of the task and its description are passed.
 func (s *Storage) SaveTask(name string, description string) (int64, error) {
 	const op = "storage.mysql.SaveTask"
 
@@ -43,6 +44,7 @@ func (s *Storage) SaveTask(name string, description string) (int64, error) {
 	return id, nil
 }
 
+// Get a description of the task by name.
 func (s *Storage) GetTaskDescriptionByName(name string) (string, error) {
 	const op = "storage.mysql.GetTaskDescriptionByName"
 
@@ -61,6 +63,7 @@ func (s *Storage) GetTaskDescriptionByName(name string) (string, error) {
 	return description, nil
 }
 
+// Get the task id by name.
 func (s *Storage) GetTaskByName(name string) (int64, error) {
 	const op = "storage.mysql.GetTaskByName"
 
@@ -79,6 +82,7 @@ func (s *Storage) GetTaskByName(name string) (int64, error) {
 	return id, nil
 }
 
+// Вelete a task by name.
 func (s *Storage) DeleteTaskByName(name string) (int64, error) {
 	const op = "storage.mysql.DeleteTaskByName"
 
