@@ -17,7 +17,7 @@ migrate create -ext sql -dir migrations -seq [name_migrat]
 up migrations:
 
 ```bach
-migrate -path migrations -database "$STORAGE_PATH" up
+migrate -path migrations -database "mysql://root:44541@tcp(localhost:3306)/go-task-manager?parseTime=true&multiStatements=true" up
 ```
 
 down migrations:

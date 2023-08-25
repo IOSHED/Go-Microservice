@@ -1,6 +1,6 @@
 
 env: "local"    # "local" or "dev" or "prod"
-storag_path: "./storage/storage.db"
+storage_path: "root:44541@tcp(localhost:3306)/go-task-manager?parseTime=true&multiStatements=true"
 httpserver:
   address: "localhost:8080"
   timeout: 4s         # The maximum waiting time to complete a single operation (for example, to complete an HTTP request).
