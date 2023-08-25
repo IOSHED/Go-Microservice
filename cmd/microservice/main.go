@@ -25,12 +25,13 @@ func main() {
 		return
 	}
 
-	id, err := storage.SaveTask("todo2", "this do it v2")
+	description, err := storage.GetTaskByName("todo2")
 	if err != nil {
-		log.Error("Failed to save task in storage.", slog.String("err", err.Error()))
-	} else {
-		log.Info("Save Task id", slog.Int64("id", id))
+		log.Error("Failed to init storage.", slog.String("err", err.Error()))
+		return
 	}
+
+	log.Info("Get task", slog.String("description", description))
 
 	// TODO: init router
 
