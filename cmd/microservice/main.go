@@ -5,6 +5,8 @@ import (
 	"micriservice/internal/config"
 	"micriservice/internal/logger"
 	"micriservice/internal/storage/mysql"
+
+	"github.com/labstack/echo"
 )
 
 func main() {
@@ -25,15 +27,17 @@ func main() {
 		return
 	}
 
-	id, err := storage.DeleteTaskByName("todo2")
+	_ = storage
+
+	// Init router
+
+	e := echo.New()
+
+	// Run server
+
+	e.Start(cfg.Address)
 	if err != nil {
-		log.Error("Failed to delete task", slog.String("err", err.Error()))
+		log.Error("Failed to run server.", slog.String("err", err.Error()))
 		return
 	}
-
-	log.Info("Delete task", slog.Int64("description", id))
-
-	// TODO: init router
-
-	// TODO: run server
 }

@@ -1,5 +1,4 @@
 
-
 ## Run project
 
 ```bach
@@ -30,3 +29,5 @@ migrate -path migrations -database "$STORAGE_PATH" down
 
 * **cleanenv** v1.5.0 load config
 * **go-sqlite3** v1.14.17 init storage sqlite3
+* **golang-migrate/migrate** v3.5.4+incompatible 
+* **echo/v4** v4.11.1 router
