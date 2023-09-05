@@ -27,6 +27,8 @@ type Response struct {
 	response.Response
 }
 
+// TODO: refactoring this handler. To divide by middleware
+
 func New(db *sql.DB, log *slog.Logger, taskSaver TaskSaver) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		const op = "handlers.url.save.new"

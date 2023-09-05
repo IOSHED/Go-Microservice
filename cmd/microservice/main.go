@@ -30,9 +30,15 @@ func main() {
 		return
 	}
 
-	// Init router
+	// Create http server
 
 	e := echo.New()
+
+	e.Server.ReadTimeout = cfg.Timeout
+	e.Server.WriteTimeout = cfg.Timeout
+	e.Server.IdleTimeout = cfg.IdleTimeout
+
+	// Init router
 
 	e.POST("/task/create", save.New(storage.Db, log, &task.Task{}))
 
