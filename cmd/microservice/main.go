@@ -3,12 +3,13 @@ package main
 import (
 	"log/slog"
 	"micriservice/internal/config"
-	"micriservice/internal/http-server/handlers/url/save"
+	"micriservice/internal/http-server/handlers/task/save"
 	"micriservice/internal/logger"
+	http_server "micriservice/internal/pkg/http-server/echo"
+
 	"micriservice/internal/storage"
 	"micriservice/internal/storage/mysql_db/table/task"
 
-	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
@@ -32,19 +33,15 @@ func main() {
 
 	// Create http server
 
-	e := echo.New()
-
-	e.Server.ReadTimeout = cfg.Timeout
-	e.Server.WriteTimeout = cfg.Timeout
-	e.Server.IdleTimeout = cfg.IdleTimeout
+	e := http_server.New(cfg)
 
 	// Init router
 
-	e.POST("/task/create", save.New(storage.Db, log, &task.Task{}))
+	e.Post("/task/create", save.New(log, task.New(storage)))
 
 	// Middleware
 
-	e.Use(
+	e.UseMiddleware(
 		middleware.Recover(),
 		middleware.RequestID(),
 		middleware.Logger(),
@@ -52,7 +49,7 @@ func main() {
 
 	// Run server
 
-	e.Start(cfg.Address)
+	e.Run()
 	if err != nil {
 		log.Error("Failed to run server.", slog.String("err", err.Error()))
 		return

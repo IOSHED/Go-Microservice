@@ -1,7 +1,6 @@
 package save
 
 import (
-	"database/sql"
 	"encoding/json"
 	"errors"
 	"log/slog"
@@ -13,8 +12,9 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type TaskSaver interface {
-	SaveTask(db *sql.DB, name string, description string) (int64, error)
+//go:generate mockery --name=SaverTask --output=mocks
+type SaverTask interface {
+	SaveTask(name string, description string) (int64, error)
 }
 
 type Request struct {
@@ -29,7 +29,7 @@ type Response struct {
 
 // TODO: refactoring this handler. To divide by middleware
 
-func New(db *sql.DB, log *slog.Logger, taskSaver TaskSaver) echo.HandlerFunc {
+func New(log *slog.Logger, saverTask SaverTask) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		const op = "handlers.url.save.new"
 
@@ -58,7 +58,7 @@ func New(db *sql.DB, log *slog.Logger, taskSaver TaskSaver) echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, response.Error(error_message))
 		}
 
-		id, err := taskSaver.SaveTask(db, req.Name, req.Description)
+		id, err := saverTask.SaveTask(req.Name, req.Description)
 
 		if err != nil {
 			if errors.Is(err, table.ErrNameTaskExists) {

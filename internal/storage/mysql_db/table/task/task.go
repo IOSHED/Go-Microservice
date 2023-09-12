@@ -1,21 +1,29 @@
 package task
 
 import (
-	"database/sql"
 	"fmt"
+	"micriservice/internal/storage"
 	err_mysql "micriservice/internal/storage/mysql_db"
 	"micriservice/internal/storage/mysql_db/table"
 
 	"github.com/go-sql-driver/mysql"
 )
 
-type Task struct{}
+type TaskStorage struct {
+	storage.Storage
+}
+
+func New(storage *storage.Storage) *TaskStorage {
+	return &TaskStorage{
+		Storage: *storage,
+	}
+}
 
 // Saving the task. The name of the task and its description are passed.
-func (t *Task) SaveTask(db *sql.DB, name string, description string) (int64, error) {
+func (t *TaskStorage) SaveTask(name string, description string) (int64, error) {
 	const op = "storage.mysql.table.task.Save"
 
-	stmt, err := db.Prepare("INSERT INTO task(name, description) VALUES(?, ?)")
+	stmt, err := t.Db.Prepare("INSERT INTO task(name, description) VALUES(?, ?)")
 	if err != nil {
 		return -1, fmt.Errorf("%s : %w", op, err)
 	}
@@ -38,10 +46,10 @@ func (t *Task) SaveTask(db *sql.DB, name string, description string) (int64, err
 }
 
 // Get a description of the task by name.
-func GetDescriptionByName(db *sql.DB, name string) (string, error) {
+func (t *TaskStorage) GetDescriptionByName(name string) (string, error) {
 	const op = "storage.mysql.table.task.GetDescriptionByName"
 
-	stmt, err := db.Prepare("SELECT description FROM task WHERE name = ?")
+	stmt, err := t.Db.Prepare("SELECT description FROM task WHERE name = ?")
 	if err != nil {
 		return "", fmt.Errorf("%s : %w", op, err)
 	}
@@ -57,10 +65,10 @@ func GetDescriptionByName(db *sql.DB, name string) (string, error) {
 }
 
 // Get the task id by name.
-func GetByName(db *sql.DB, name string) (int64, error) {
+func (t *TaskStorage) GetByName(name string) (int64, error) {
 	const op = "storage.mysql.table.task.GetByName"
 
-	stmt, err := db.Prepare("SELECT id FROM task WHERE name = ?")
+	stmt, err := t.Db.Prepare("SELECT id FROM task WHERE name = ?")
 	if err != nil {
 		return -1, fmt.Errorf("%s : %w", op, err)
 	}
@@ -76,15 +84,15 @@ func GetByName(db *sql.DB, name string) (int64, error) {
 }
 
 // Вelete a task by name.
-func DeleteByName(db *sql.DB, name string) (int64, error) {
+func (t *TaskStorage) DeleteByName(name string) (int64, error) {
 	const op = "storage.mysql.table.task.DeleteByName"
 
-	id, err := GetByName(db, name)
+	id, err := t.GetByName(name)
 	if err != nil {
 		return -1, fmt.Errorf("%s : %w", op, err)
 	}
 
-	_, err = db.Exec("DELETE FROM task WHERE name = ?", name)
+	_, err = t.Db.Exec("DELETE FROM task WHERE name = ?", name)
 	if err != nil {
 		return -1, fmt.Errorf("%s : %w", op, err)
 	}

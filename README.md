@@ -31,3 +31,4 @@ migrate -path migrations -database "$STORAGE_PATH" down
 * **go-sqlite3** v1.14.17 init storage sqlite3
 * **golang-migrate/migrate** v3.5.4+incompatible 
 * **echo/v4** v4.11.1 router
+* **mockery** v2.33.2 generate mock
